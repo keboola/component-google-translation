@@ -1,0 +1,2 @@
+https://github.com/keboola/python-docker-application/zipball/master#egg=keboola
+pandas
