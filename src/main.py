@@ -12,7 +12,7 @@ base_url = "https://translation.googleapis.com/language/translate/v2"
 
 def output(filename, data):
 
-    dest = DEFAULT_TABLE_DESTINATION + filename + ".csv"
+    dest = filename + ".csv"
 
     if os.path.isfile(dest):
         with open(dest, 'a') as b:
