@@ -40,6 +40,7 @@ def translate(original_id, text, api_key, target_language='en'):
 
     return {
         "original_id": original_id,
+        "original_text": text,
         "translated_text": translated_text,
         "detected_source_language": detected_source_language
     }
