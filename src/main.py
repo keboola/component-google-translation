@@ -12,7 +12,7 @@ base_url = "https://translation.googleapis.com/language/translate/v2"
 
 def output(filename, data):
 
-    dest = filename + ".csv"
+    dest = DEFAULT_TABLE_DESTINATION + filename + ".csv"
 
     if os.path.isfile(dest):
         with open(dest, 'a') as b:
@@ -34,7 +34,6 @@ def translate(original_id, text, api_key, target_language='en'):
     r = requests.post(base_url, params=params)
 
     json_obj = json.loads(r.text)
-    print(json_obj)
     json_obj = json_obj.get('data').get('translations')[0]
     translated_text = json_obj.get('translatedText')
     detected_source_language = json_obj.get('detectedSourceLanguage')
@@ -46,9 +45,9 @@ def translate(original_id, text, api_key, target_language='en'):
     }
 
 
-def main(input_table_name, target_language, api_key):
+def main(input_table_path, target_language, api_key):
 
-    df = pd.read_csv(input_table_name)
+    df = pd.read_csv(input_table_path)
     df = df[['id', 'text']]
 
     result_records = []
@@ -61,4 +60,8 @@ def main(input_table_name, target_language, api_key):
         result_records.append(result_record)
 
     df_result = pd.DataFrame.from_records(result_records)
-    output(input_table_name.replace('.csv', '') + '_translated', df_result)
+
+    output_table_name = input_table_path.split('/')[-1]
+    # strip the csv file extension
+    output_table_name = output_table_name[:-4]
+    output(output_table_name + '_translated', df_result)
