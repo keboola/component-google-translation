@@ -4,8 +4,8 @@ import json
 import pandas as pd
 
 
-DEFAULT_TABLE_SOURCE = "data/in/tables/"
-DEFAULT_TABLE_DESTINATION = "data/out/tables/"
+DEFAULT_TABLE_SOURCE = "/data/in/tables/"
+DEFAULT_TABLE_DESTINATION = "/data/out/tables/"
 
 base_url = "https://translation.googleapis.com/language/translate/v2"
 
