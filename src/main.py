@@ -48,7 +48,7 @@ def translate(original_id, text, api_key, target_language='en'):
 
 def main(input_table_name, target_language, api_key):
 
-    df = pd.read_csv(DEFAULT_TABLE_SOURCE + input_table_name)
+    df = pd.read_csv(input_table_name)
     df = df[['id', 'text']]
 
     result_records = []
