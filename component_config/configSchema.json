@@ -11,7 +11,7 @@
       "title": "Google API Key",
       "format": "password",
       "minLength": 4,
-      "description": "Please visit <a href='https://console.cloud.google.com/apis/credentials'>Google Cloud Console</a>"
+      "description": "For API key, please visit <a href='https://console.cloud.google.com/apis/credentials'>Google Cloud Console</a><ol><li>Create a new API key by clicking: Create credentials -> API Keys</li><li>Use your existing API key and add Translation API to API restrictions</li></ol><br>Please refer to GCP <a href='https://cloud.google.com/translate/pricing'>pricing guide</a> for detailed information about the costs of API requests."
     },
     "target_language": {
       "enum": [

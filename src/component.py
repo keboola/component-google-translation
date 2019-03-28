@@ -21,8 +21,8 @@ class Component(KBCEnvHandler):
             debug = True
 
         self.set_default_logger('DEBUG' if debug else 'INFO')
-        logging.info('Running version %s', APP_VERSION)
-        logging.info('Loading configuration...')
+        # logging.info('Running version %s', APP_VERSION)
+        # logging.info('Loading configuration...')
 
         try:
             self.validateConfig()
@@ -30,7 +30,7 @@ class Component(KBCEnvHandler):
             logging.error(e)
             exit(1)
 
-    def run(self, debug=True):
+    def run(self, debug=False):
         '''
         Main execution code
         '''
@@ -38,6 +38,9 @@ class Component(KBCEnvHandler):
         api_key = params.get('#API_key')
         target_language = params.get('target_language')
         tables = self.configuration.get_input_tables()
+
+        if not tables:
+            raise Exception("No input table found, please specify the input table in the input mapping section")
 
         for t in tables:
             input_file_path = t["full_path"]

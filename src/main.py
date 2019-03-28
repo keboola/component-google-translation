@@ -2,6 +2,7 @@ import os
 import requests
 import json
 import pandas as pd
+from googleapiclient.errors import HttpError
 
 
 DEFAULT_TABLE_SOURCE = "/data/in/tables/"
@@ -49,6 +50,14 @@ def translate(original_id, text, api_key, target_language='en'):
 def main(input_table_path, target_language, api_key):
 
     df = pd.read_csv(input_table_path)
+
+    cols = df.columns.values
+    msg = """Please prepare all your input tables with the 2 columns below:
+    - id: the original ID column in your raw table, this is only for you to have a reference key
+    - text: the column of texts you want to analyze Other columns in the tables will be omitted."""
+    if not ('id' in cols) or not ('text' in cols):
+        raise ValueError(msg)
+
     df = df[['id', 'text']]
 
     result_records = []
@@ -57,8 +66,12 @@ def main(input_table_path, target_language, api_key):
         original_id = row.get('id')
         text = row.get('text')
 
-        result_record = translate(original_id, text, api_key=api_key, target_language=target_language)
-        result_records.append(result_record)
+        try:
+            result_record = translate(original_id, text, api_key=api_key, target_language=target_language)
+            result_records.append(result_record)
+        except HttpError as e:
+            if json.loads(e.content).get('error', '').get('reason', '').find('keyInvalid') > 0:
+                raise ValueError("The API Key is invalid")
 
     df_result = pd.DataFrame.from_records(result_records)
 
