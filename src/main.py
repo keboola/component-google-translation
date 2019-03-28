@@ -2,7 +2,6 @@ import os
 import requests
 import json
 import pandas as pd
-from googleapiclient.errors import HttpError
 
 
 DEFAULT_TABLE_SOURCE = "/data/in/tables/"
@@ -33,6 +32,8 @@ def translate(original_id, text, api_key, target_language='en'):
     }
 
     r = requests.post(base_url, params=params)
+    if json.loads(r.content).get("error"):
+        raise ValueError(json.loads(r.content).get("error").get("message"))
 
     json_obj = json.loads(r.text)
     json_obj = json_obj.get('data').get('translations')[0]
@@ -66,12 +67,8 @@ def main(input_table_path, target_language, api_key):
         original_id = row.get('id')
         text = row.get('text')
 
-        try:
-            result_record = translate(original_id, text, api_key=api_key, target_language=target_language)
-            result_records.append(result_record)
-        except HttpError as e:
-            if json.loads(e.content).get('error', '').get('reason', '').find('keyInvalid') > 0:
-                raise ValueError("The API Key is invalid")
+        result_record = translate(original_id, text, api_key=api_key, target_language=target_language)
+        result_records.append(result_record)
 
     df_result = pd.DataFrame.from_records(result_records)
 
