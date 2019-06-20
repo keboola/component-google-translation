@@ -60,6 +60,8 @@ class Component(KBCEnvHandler):
             logging.error("No input table was provided. Please provide an input table, with mandatory columns \"id\"," +
                           " \"text\" and optional column \"source\". See documentation for more information.")
 
+            sys.exit(1)
+
         for _t in _input_tables:
 
             _path = _t['full_path']
@@ -128,4 +130,4 @@ class Component(KBCEnvHandler):
 
                     if _requestCounter % 500 == 0:
 
-                        logging.info("Already translated %s requests." % _requestCounter)
+                        logging.info("Made %s requests to Google Translate API." % _requestCounter)

@@ -25,7 +25,7 @@ logger.addHandler(logging_gelf_handler)
 # removes the initial stdout logging
 logger.removeHandler(logger.handlers[0])
 
-APP_VERSION = '0.3.0'
+APP_VERSION = '0.3.1'
 
 if __name__ == '__main__':
 
