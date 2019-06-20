@@ -32,7 +32,7 @@ An [ISO-639-1 language identifier](https://cloud.google.com/translate/docs/langu
 
 The output of the extractor is a table with translated columns. The table is loaded incrementally with column `id` used as a primary key and with following column specification:
 
-- `id` - identificator of text. Relates to original request.
+- `id` - identificator of text request. Relates to original request.
 - `translatedText` - a translation of the text in the target language
 - `detectedSourceLanguage` - if `source` is not specified, the column contains information on detected language in the text. Otherwise is equal to `source`.
 
