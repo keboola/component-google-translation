@@ -17,7 +17,7 @@ The component takes as an input one or more tables and 2 user specified paramete
 Each of the table must contain 2 required columns and may contain 1 optional column to make the translation more precise. The list of columns is:
 
 - `id` - (required) the column is used as primary key in the output,
-- `text` - (required) text to be translated
+- `text` - (required) text to be translated,
 - `source` - (optional) an [ISO-639-1 language identifier](https://cloud.google.com/translate/docs/languages) of the source language of the text. If the column is left out or left blank, the Translate API will automatically detect the source language.
 
 ### API Token
@@ -32,8 +32,8 @@ An [ISO-639-1 language identifier](https://cloud.google.com/translate/docs/langu
 
 The output of the extractor is a table with translated columns. The table is loaded incrementally with column `id` used as a primary key and with following column specification:
 
-- `id` - identificator of text request. Relates to original request.
-- `translatedText` - a translation of the text in the target language
+- `id` - identificator of text request. Relates to original request and is used as PK,
+- `translatedText` - a translation of the text in the target language,
 - `detectedSourceLanguage` - if `source` is not specified, the column contains information on detected language in the text. Otherwise is equal to `source`.
 
 ## Development
