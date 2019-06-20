@@ -35,3 +35,12 @@ The output of the extractor is a table with translated columns. The table is loa
 - `id` - identificator of text. Relates to original request.
 - `translatedText` - a translation of the text in the target language
 - `detectedSourceLanguage` - if `source` is not specified, the column contains information on detected language in the text. Otherwise is equal to `source`.
+
+## Development
+
+For development purposes, the container needs to be built and image ran. Use following commands:
+
+```
+docker-compose build dev
+docker-compose run --rm dev
+```
