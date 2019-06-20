@@ -22,7 +22,7 @@ class googleTranslateClient(HttpClientBase):
 
         self._check_api_token()
 
-        self.post_raw = requests.post
+        # self.post_raw = requests.post
 
     def _check_api_token(self):
 
@@ -60,12 +60,10 @@ class googleTranslateClient(HttpClientBase):
 
         _req_params = {'q': text, 'source': source_language}
 
-        _req_params = {**self._default_params, **_req_params}
+        # _req_params = {**self._default_params, **_req_params}
 
         logging.debug("Request parameters:")
         logging.debug(_req_params)
-
-        # url = self.base_url + f'?key={self.token}&q={text}'
 
         try:
             _rsp = self.post_raw(url=self.base_url, params=_req_params)
