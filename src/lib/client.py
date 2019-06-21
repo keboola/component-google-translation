@@ -34,7 +34,7 @@ class googleTranslateClient(HttpClientBase):
 
             logging.info("API token verified. Login successful.")
 
-            self.supported_languages = [x['language'] for x in _rsp.json()['data']['languages']]
+            self.supported_languages = [x['language'].lower() for x in _rsp.json()['data']['languages']]
 
             logging.debug("Supported languages are:")
             logging.debug(self.supported_languages)

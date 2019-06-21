@@ -104,6 +104,10 @@ class Component(KBCEnvHandler):
                     _toTranslate = row['text']
                     _sourceLanguage = row.get('source')
 
+                    if _sourceLanguage is not None:
+
+                        _sourceLanguage = _sourceLanguage.lower()
+
                     _rsp = self.client.translate_text(text=_toTranslate,
                                                       source_language=_sourceLanguage)
 
