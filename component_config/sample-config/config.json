@@ -11,10 +11,6 @@
         {
           "source": "in.c-test.test",
           "destination": "test.csv"
-        },
-        {
-          "source": "in.c-test.test2",
-          "destination":"test2.csv"
         }
       ]
     }

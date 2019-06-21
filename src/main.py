@@ -6,11 +6,11 @@ import logging_gelf.formatters
 from lib.component import Component
 
 # Environment setup
-sys.tracebacklimit = 0
+sys.tracebacklimit = 3
 
 # Logging
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=logging.INFO,
     format='%(asctime)s - %(levelname)-8s : [line:%(lineno)3s] %(message)s',
     datefmt="%Y-%m-%d %H:%M:%S")
 
@@ -25,7 +25,7 @@ logger.addHandler(logging_gelf_handler)
 # removes the initial stdout logging
 logger.removeHandler(logger.handlers[0])
 
-APP_VERSION = '0.3.2'
+APP_VERSION = '0.3.4'
 
 if __name__ == '__main__':
 

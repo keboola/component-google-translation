@@ -1,1 +1,1 @@
-Google Translate allows to translate text into chosen language.
+Google Translate allows to translate text into any supported language.

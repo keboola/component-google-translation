@@ -6,13 +6,13 @@ The extractor for Google Translate allows to translate text into a desired langu
 
 ## Requirements
 
-The component requires valid Google Cloud API token with translation allowed. The API token is subject to [limits](https://cloud.google.com/translate/quotas) thus you will need to set up the translation limits according to your needs. The component uses exponential backoff to overcome Google's 100 second limit in case it is reached.
+The component requires valid Google Cloud API token with translation allowed. The API token is subject to [limits](https://cloud.google.com/translate/quotas) thus you will need to set up the translation limits according to your needs. The component uses exponential backoff to overcome Google's 100 second limit in case it is reached. In case the daily limit is reached, the extractor will fail.
 
 ## Input
 
-The component takes as an input one or more tables and 2 user specified parameters. A sample configuration can be found in [component's repository](https://bitbucket.org/kds_consulting_team/kds-team.ex-google-translation/src/master/component_config/sample-config/).
+The component takes as an input an input table (more below) and 2 user specified parameters. A sample configuration can be found in [component's repository](https://bitbucket.org/kds_consulting_team/kds-team.ex-google-translation/src/master/component_config/sample-config/).
 
-### Input table(s)
+### Input table
 
 Each of the table must contain 2 required columns and may contain 1 optional column to make the translation more precise. The list of columns is:
 
@@ -20,11 +20,11 @@ Each of the table must contain 2 required columns and may contain 1 optional col
 - `text` - (required) text to be translated,
 - `source` - (optional) an [ISO-639-1 language identifier](https://cloud.google.com/translate/docs/languages) of the source language of the text. If the column is left out or left blank, the Translate API will automatically detect the source language.
 
-### API Token
+### API Token (`#API_key`)
 
 The API token can be obtained in the credentials section of the [Google Cloud Console](https://console.cloud.google.com/apis/credentials). The API token must have translation allowed, otherwise the component will fail.
 
-### Target language
+### Target language (`target_language`)
 
 An [ISO-639-1 language identifier](https://cloud.google.com/translate/docs/languages) of the language to which all text will be translated.
 
@@ -32,9 +32,9 @@ An [ISO-639-1 language identifier](https://cloud.google.com/translate/docs/langu
 
 The output of the extractor is a table with translated columns. The table is loaded incrementally with column `id` used as a primary key and with following column specification:
 
-- `id` - identificator of text request. Relates to original request and is used as PK,
+- `id` - identificator of text request. Relates to input table and is used as PK,
 - `translatedText` - a translation of the text in the target language,
-- `detectedSourceLanguage` - if `source` is not specified, the column contains information on detected language in the text. Otherwise is equal to `source`.
+- `detectedSourceLanguage` - if `source` is not specified, the column contains information on detected language in the text. Otherwise it is equal to `source`.
 
 ## Development
 

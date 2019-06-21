@@ -50,6 +50,7 @@ class Component(KBCEnvHandler):
 
     def _check_input_tables(self):
 
+        # Only the first table is taken into account
         _input_tables = self.configuration.get_input_tables()
 
         logging.debug("Input tables:")
@@ -62,10 +63,12 @@ class Component(KBCEnvHandler):
 
             sys.exit(1)
 
-        for _t in _input_tables:
+        else:
 
-            _path = _t['full_path']
+            _input = _input_tables[0]
+            _path = _input['full_path']
             _mnfst_path = _path + '.manifest'
+
             with open(_mnfst_path) as _mnfst_file:
 
                 _mnfst = json.load(_mnfst_file)
@@ -78,60 +81,58 @@ class Component(KBCEnvHandler):
 
                 else:
 
-                    logging.error("Missing required column \"id\" or \"text\" in table %s." % _t['destination'])
+                    logging.error("Missing required column \"id\" or \"text\" in table %s." % _input['destination'])
                     logging.error("Please, make sure all of the required columns are inputted.")
 
                     sys.exit(1)
 
-        self.input_tables = _input_tables
+        self.input_table = _input
 
     def run(self):
 
         logging.info("Starting translation...")
         _requestCounter = 0
 
-        for _table in self.input_tables:
+        _path = self.input_table['full_path']
+        with open(_path) as _input:
+            _reader = csv.DictReader(_input)
 
-            _path = _table['full_path']
-            with open(_path) as _input:
-                _reader = csv.DictReader(_input)
+            for row in _reader:
 
-                for row in _reader:
+                _requestCounter += 1
 
-                    _requestCounter += 1
+                _id = row['id']
+                _toTranslate = row['text']
+                _sourceLanguage = row.get('source')
 
-                    _id = row['id']
-                    _toTranslate = row['text']
-                    _sourceLanguage = row.get('source')
+                if _sourceLanguage is not None:
 
-                    if _sourceLanguage is not None:
+                    _sourceLanguage = _sourceLanguage.lower()
 
-                        _sourceLanguage = _sourceLanguage.lower()
+                _rsp = self.client.translate_text(text=_toTranslate,
+                                                  source_language=_sourceLanguage)
 
-                    _rsp = self.client.translate_text(text=_toTranslate,
-                                                      source_language=_sourceLanguage)
+                if _rsp.ok is True:
 
-                    if _rsp.ok is True:
+                    _rsp_js = _rsp.json()['data']['translations'][0]
 
-                        _rsp_js = _rsp.json()['data']['translations'][0]
+                    _translatedText = _rsp_js['translatedText']
+                    _detectedSourceLanguage = _rsp_js.get('detectedSourceLanguage')
 
-                        _translatedText = _rsp_js['translatedText']
-                        _detectedSourceLanguage = _rsp_js.get('detectedSourceLanguage')
+                    if _detectedSourceLanguage is None:
 
-                        if _detectedSourceLanguage is None:
+                        _detectedSourceLanguage = _sourceLanguage
 
-                            _detectedSourceLanguage = _sourceLanguage
+                    _toWrite = {'id': _id,
+                                'translatedText': _translatedText,
+                                'detectedSourceLanguage': _detectedSourceLanguage}
 
-                        _toWrite = {'id': _id,
-                                    'translatedText': _translatedText,
-                                    'detectedSourceLanguage': _detectedSourceLanguage}
+                    self.writer.writerow(_toWrite)
 
-                        self.writer.writerow(_toWrite)
+                else:
 
-                    else:
+                    logging.warn("Could not translate text for id %s." % _id)
 
-                        logging.warn("Could not translate text for id %s." % _id)
+                if _requestCounter % 500 == 0:
 
-                    if _requestCounter % 500 == 0:
-
-                        logging.info("Made %s requests to Google Translate API." % _requestCounter)
+                    logging.info("Made %s requests to Google Translate API." % _requestCounter)
