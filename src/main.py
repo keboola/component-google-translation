@@ -6,7 +6,7 @@ import logging_gelf.formatters
 from lib.component import Component
 
 # Environment setup
-sys.tracebacklimit = 3
+sys.tracebacklimit = 0
 
 # Logging
 logging.basicConfig(
