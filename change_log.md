@@ -1,3 +1,7 @@
+**0.3.5**
+Added sample table examples.
+Changed component descriptions.
+
 **0.3.4**
 Corrected logging level. Changed support from multiple tables to only a single table. Multiple tables support might be re-added in the future.
 

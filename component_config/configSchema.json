@@ -231,7 +231,7 @@
       "type": "string",
       "title": "Target Language",
       "default": "en",
-      "description": "Choose the target language to which the text will be translated. <br/> The list of available languages is available on <a href='https://cloud.google.com/translate/docs/languages'>Google support pages</a>."
+      "description": "Choose the target language to which the text will be translated. <br/> The list of supported languages is available on <a href='https://cloud.google.com/translate/docs/languages'>Google support pages</a>."
     }
   }
 }
