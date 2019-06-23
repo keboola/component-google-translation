@@ -41,8 +41,6 @@ pipelines:
     '*':
       - step:
           deployment: production
-          environment:
-            BASE_KBC_CONFIG: 515016449
           script:
             - export APP_IMAGE=$APP_IMAGE
             - docker build . --tag=$APP_IMAGE
@@ -57,7 +55,7 @@ pipelines:
             - docker tag $APP_IMAGE:latest $REPOSITORY:test
             - eval $(docker run --rm -e KBC_DEVELOPERPORTAL_USERNAME -e KBC_DEVELOPERPORTAL_PASSWORD -e KBC_DEVELOPERPORTAL_URL quay.io/keboola/developer-portal-cli-v2:latest ecr:get-login $KBC_DEVELOPERPORTAL_VENDOR $KBC_DEVELOPERPORTAL_APP)
             - docker push $REPOSITORY:test
-            - docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $BASE_KBC_CONFIG test
+            - docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP 515016449 test
             # - docker run --rm -e KBC_STORAGE_TOKEN quay.io/keboola/syrup-cli:latest run-job $KBC_DEVELOPERPORTAL_APP $KBC_CONFIG_1 test
             - ./scripts/update_dev_portal_properties.sh
             - ./deploy.sh
