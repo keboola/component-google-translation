@@ -83,7 +83,7 @@ class Component(ComponentBase):
     def _create_result_table(self) -> None:
 
         self.table_definition = self.create_out_table_definition("translated-text.csv", columns=OUTPUT_FIELDS,
-                                                                 primary_key=OUTPUT_FIELDS)
+                                                                 primary_key=OUTPUT_PK)
 
         self.out_file = open(self.table_definition.full_path, 'w')
         self.writer = csv.DictWriter(self.out_file, fieldnames=OUTPUT_FIELDS,
