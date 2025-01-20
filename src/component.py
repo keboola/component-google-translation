@@ -1,5 +1,6 @@
 import csv
 import logging
+from ctypes import DEFAULT_MODE
 from typing import Dict
 
 from keboola.component.base import ComponentBase
@@ -13,7 +14,8 @@ TARGET_LANGUAGE_KEY = 'target_language'
 
 MANDATORY_PARS = [API_KEY, TARGET_LANGUAGE_KEY]
 OUTPUT_FIELDS = ['id', 'translatedText', 'detectedSourceLanguage']
-OUTPUT_PK = ['id']
+DEFAULT_OUTPUT_PK = ['id', 'translatedText', 'detectedSourceLanguage']
+DEFAULT_OUTPUT_TABLE_NAME = "translated-text.csv"
 
 FAILED_OUTPUT_FIELDS = ['id', 'failed_text', "reason"]
 FAILED_OUTPUT_PK = ['id']
@@ -81,9 +83,19 @@ class Component(ComponentBase):
         return {'id': row_id, 'translatedText': _translatedText, 'detectedSourceLanguage': _detectedSourceLanguage}
 
     def _create_result_table(self) -> None:
-
-        self.table_definition = self.create_out_table_definition("translated-text.csv", columns=OUTPUT_FIELDS,
-                                                                 primary_key=OUTPUT_PK)
+        params = self.configuration.parameters
+        if 'destination' in params:
+            destination = params['destination']
+            incremental = (True if destination.get('load_type') == 'incremental_load' else False)
+            self.table_definition = self.create_out_table_definition(destination.get('output_table_name'),
+                                                                     incremental=incremental,
+                                                                     columns=OUTPUT_FIELDS,
+                                                                     primary_key=destination.get('output_table_name'))
+        else:
+            # backward compatibility for older configurations
+            self.table_definition = self.create_out_table_definition(DEFAULT_OUTPUT_TABLE_NAME,
+                                                                     columns=OUTPUT_FIELDS,
+                                                                     primary_key=DEFAULT_OUTPUT_PK)
 
         self.out_file = open(self.table_definition.full_path, 'w')
         self.writer = csv.DictWriter(self.out_file, fieldnames=OUTPUT_FIELDS,
