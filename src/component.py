@@ -86,10 +86,10 @@ class Component(ComponentBase):
         if 'destination' in params:
             destination = params['destination']
             incremental = (True if destination.get('load_type') == 'incremental_load' else False)
-            self.table_definition = self.create_out_table_definition(destination.get('output_table_name'),
+            self.table_definition = self.create_out_table_definition(name=destination.get('output_table_name'),
                                                                      incremental=incremental,
                                                                      columns=OUTPUT_FIELDS,
-                                                                     primary_key=destination.get('output_table_name'))
+                                                                     primary_key=destination.get('primary_keys'))
         else:
             # backward compatibility for older configurations
             self.table_definition = self.create_out_table_definition(DEFAULT_OUTPUT_TABLE_NAME,
