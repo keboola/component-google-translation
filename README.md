@@ -38,7 +38,9 @@ An [ISO-639-1 language identifier](https://cloud.google.com/translate/docs/langu
 
 ## Output
 
-The output of the component is a table with translated rows. The table is loaded incrementally with column `id` used as a primary key and with following column specification:
+The output of the component is a table with translated rows. The table can be loaded as full or incremental load type, also you can define the PK. [More information about storing tables is here](https://help.keboola.com/storage/tables/#incremental-loading).  
+
+The table contains the following columns:
 
 - `id` - identificator of text request. Relates to input table and is used as PK,
 - `translatedText` - a translation of the text in the target language,
