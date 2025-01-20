@@ -1,6 +1,5 @@
 import csv
 import logging
-from ctypes import DEFAULT_MODE
 from typing import Dict
 
 from keboola.component.base import ComponentBase
